@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--<properties resource="dbconfig.properties"/>-->
+    <settings>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
+    <typeAliases>
+        <!--<typeAlias type="me.gacl.domain.User" alias="_User"/>-->
+        <package name="me.gacl.domain"/>
+    </typeAliases>
+
+<!--
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            &lt;!&ndash; 配置数据库连接信息 &ndash;&gt;
+            <dataSource type="POOLED">
+                <property name="driver" value="${driverClassName}"/>
+                <property name="url" value="${jdbc_url}"/>
+                <property name="username" value="${jdbc_username}"/>
+                <property name="password" value="${jdbc_password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+-->
+
+
+
+    <!--<mappers>-->
+        <!--&lt;!&ndash; 注册userMapper.xml文件，-->
+        <!--userMapper.xml位于me.gacl.mapping这个包下，所以resource写成me/gacl/mapping/userMapper.xml&ndash;&gt;-->
+        <!--<mapper resource="mapping/UserMapper.xml"/>-->
+        <!--<mapper resource="mapping/OrderMapper.xml"/>-->
+        <!--<mapper resource="mapping/classMapper.xml"/>-->
+        <!--&lt;!&ndash; 注册UserMapper映射接口&ndash;&gt;-->
+        <!--&lt;!&ndash;<mapper class="me.gacl.dao.UserMapper"/>&ndash;&gt;-->
+    <!--</mappers>-->
+
+
+</configuration>

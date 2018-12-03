@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="me.gacl.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        ,
+        NAME,
+        age
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from users
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from users
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="User">
+        insert into users (id, NAME, age)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="User">
+        insert into users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                NAME,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="User">
+        update users
+        <set>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                age = #{age,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="User">
+        update users
+        set NAME = #{name,jdbcType=VARCHAR},
+            age  = #{age,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="getUser" parameterType="int"
+            resultType="User">
+        select *
+        from users
+        where id = #{id}
+    </select>
+    <insert id="addUser" parameterType="User">
+        insert into users (id, NAME, age)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER})
+    </insert>
+    <delete id="deleteUser" parameterType="int">
+        delete
+        from users
+        where id = #{id}
+    </delete>
+    <update id="updateUser" parameterType="User">
+        update users
+        set name = #{name},
+            age  = #{age}
+        where id = #{id}
+    </update>
+    <select id="getAllUsers" resultType="User">
+        select *
+        from users
+    </select>
+    <select id="getUserCount" parameterMap="getUserCountMap" statementType="CALLABLE">
+        CALL mybatis.ges_user_count(?,?)
+    </select>
+    <parameterMap id="getUserCountMap" type="java.util.Map">
+        <parameter property="sexid" mode="IN" jdbcType="INTEGER"/>
+        <parameter property="usercount" mode="OUT" jdbcType="INTEGER"/>
+    </parameterMap>
+    <cache/>
+</mapper>

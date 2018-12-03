@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="me.gacl.dao.OrderMapper">
+    <resultMap id="BaseResultMap" type="me.gacl.domain.Order">
+        <id column="order_id" property="orderId" jdbcType="INTEGER"/>
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="order_price" property="orderPrice" jdbcType="REAL"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        order_id
+        ,
+        order_no,
+        order_price
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from orders
+        where order_id = #{orderId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from orders
+        where order_id = #{orderId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="me.gacl.domain.Order">
+        insert into orders (order_id, order_no, order_price)
+        values (#{orderId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{orderPrice,jdbcType=REAL})
+    </insert>
+    <insert id="insertSelective" parameterType="me.gacl.domain.Order">
+        insert into orders
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="orderNo != null">
+                order_no,
+            </if>
+            <if test="orderPrice != null">
+                order_price,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orderPrice != null">
+                #{orderPrice,jdbcType=REAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="me.gacl.domain.Order">
+        update orders
+        <set>
+            <if test="orderNo != null">
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orderPrice != null">
+                order_price = #{orderPrice,jdbcType=REAL},
+            </if>
+        </set>
+        where order_id = #{orderId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="me.gacl.domain.Order">
+        update orders
+        set order_no    = #{orderNo,jdbcType=VARCHAR},
+            order_price = #{orderPrice,jdbcType=REAL}
+        where order_id = #{orderId,jdbcType=INTEGER}
+    </update>
+    <!--
+           根据id查询得到一个order对象，使用这个查询是查询不到我们想要的结果的，
+           这主要是因为实体类的属性名和数据库的字段名对应不上的原因，因此无法查询出对应的记录
+        -->
+    <select id="getOrderById" parameterType="int"
+            resultType="me.gacl.domain.Order">
+        select *
+        from orders
+        where order_id = #{id}
+    </select>
+
+    <!--
+        根据id查询得到一个order对象，使用这个查询是可以正常查询到我们想要的结果的，
+        这是因为我们将查询的字段名都起一个和实体类属性名相同的别名，这样实体类的属性名和查询结果中的字段名就可以一一对应上
+     -->
+    <select id="selectOrder" parameterType="int"
+            resultType="me.gacl.domain.Order">
+        select order_id orderId, order_no orderNo,order_price orderPrice
+        from orders
+        where order_id = #{id}
+    </select>
+
+    <!--
+    根据id查询得到一个order对象，使用这个查询是可以正常查询到我们想要的结果的，
+    这是因为我们通过<resultMap>映射实体类属性名和表的字段名一一对应关系 -->
+    <select id="selectOrderResultMap" parameterType="int" resultMap="orderResultMap">
+        select *
+        from orders
+        where order_id = #{id}
+    </select>
+    <!--通过<resultMap>映射实体类属性名和表的字段名对应关系 -->
+    <resultMap type="me.gacl.domain.Order" id="orderResultMap">
+        <!-- 用id属性来映射主键字段 -->
+        <id property="orderId" column="order_id"/>
+        <!-- 用result属性来映射非主键字段 -->
+        <result property="orderNo" column="order_no"/>
+        <result property="orderPrice" column="order_price"/>
+    </resultMap>
+</mapper>
